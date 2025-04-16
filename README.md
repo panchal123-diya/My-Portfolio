@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Hiten Patel - Portfolio Website
 
 A modern, responsive portfolio website for Hiten Patel, a software developer. This website showcases skills, projects, and provides contact information.
@@ -68,3 +69,7 @@ Hiten Patel - [hp040912@gmail.com](mailto:hp040912@gmail.com)
 ---
 
 Created with ❤️ by Hiten Patel 
+=======
+# My-Portfolio
+A responsive and modern personal portfolio built with HTML, CSS, and JavaScript to showcase my skills and projects.
+>>>>>>> f6d54cadb47299bacada7bd2af9009f55b49f82f
