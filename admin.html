@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Diya Panchal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 20px;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .admin-title {
+            font-size: 2rem;
+            color: var(--dark-color);
+        }
+        
+        .message-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        
+        .message-sender {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .message-date {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .message-subject {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .message-content {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .message-email {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .no-messages {
+            text-align: center;
+            padding: 50px;
+            color: var(--gray-color);
+            font-size: 1.2rem;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .password-form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .password-form h2 {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Modal -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-form">
+            <h2>Admin Login</h2>
+            <div class="form-group">
+                <input type="password" id="adminPassword" placeholder="Enter Password" required>
+            </div>
+            <button id="loginBtn" class="btn primary-btn">Login</button>
+        </div>
+    </div>
+
+    <div class="admin-container" id="adminContent" style="display: none;">
+        <div class="admin-header">
+            <h1 class="admin-title">Message Dashboard</h1>
+            <a href="index.html" class="btn secondary-btn">Back to Website</a>
+        </div>
+        
+        <div class="admin-actions">
+            <button id="clearMessages" class="btn secondary-btn">Clear All Messages</button>
+            <button id="addTestMessage" class="btn primary-btn">Add Test Message</button>
+        </div>
+        
+        <div id="messagesContainer">
+            <!-- Messages will be displayed here -->
+            <div class="no-messages" id="noMessages">
+                <i class="fas fa-inbox fa-3x"></i>
+                <p>No messages yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple password protection
+        const passwordModal = document.getElementById('passwordModal');
+        const adminContent = document.getElementById('adminContent');
+        const loginBtn = document.getElementById('loginBtn');
+        const adminPassword = document.getElementById('adminPassword');
+        
+        // Set a simple password (in a real app, this would be handled securely on a server)
+        const correctPassword = 'admin123';
+        
+        loginBtn.addEventListener('click', function() {
+            if (adminPassword.value === correctPassword) {
+                passwordModal.style.display = 'none';
+                adminContent.style.display = 'block';
+                loadMessages();
+            } else {
+                alert('Incorrect password. Please try again.');
+                adminPassword.value = '';
+            }
+        });
+        
+        // Allow Enter key to submit password
+        adminPassword.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
+        
+        // Load messages from local storage
+        function loadMessages() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const noMessages = document.getElementById('noMessages');
+            
+            // Get messages from local storage
+            let messages = JSON.parse(localStorage.getItem('contactMessages')) || [];
+            
+            if (messages.length === 0) {
+                noMessages.style.display = 'block';
+                return;
+            }
+            
+            noMessages.style.display = 'none';
+            
+            // Sort messages by date (newest first)
+            messages.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Clear previous messages
+            messagesContainer.innerHTML = '';
+            
+            // Add each message to the container
+            messages.forEach(message => {
+                const messageCard = document.createElement('div');
+                messageCard.className = 'message-card';
+                
+                const date = new Date(message.date).toLocaleString();
+                
+                messageCard.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-sender">${message.name}</div>
+                        <div class="message-date">${date}</div>
+                    </div>
+                    <div class="message-subject">${message.subject}</div>
+                    <div class="message-content">${message.message}</div>
+                    <div class="message-email">
+                        <i class="fas fa-envelope"></i> ${message.email}
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageCard);
+            });
+        }
+        
+        // Clear all messages
+        document.getElementById('clearMessages').addEventListener('click', function() {
+            if (confirm('Are you sure you want to delete all messages?')) {
+                localStorage.removeItem('contactMessages');
+                loadMessages();
+            }
+        });
+        
+        // Add a test message (for demonstration)
+        document.getElementById('addTestMessage').addEventListener('click', function() {
+            let messages = JSON.parse(localStorage.getItem('contactMessages')) || [];
+            
+            const testMessage = {
+                name: 'Test User',
+                email: 'test@example.com',
+                subject: 'Test Message',
+                message: 'This is a test message to demonstrate how the message dashboard works.',
+                date: new Date().toISOString()
+            };
+            
+            messages.push(testMessage);
+            localStorage.setItem('contactMessages', JSON.stringify(messages));
+            
+            loadMessages();
+        });
+    </script>
+</body>
+</html> 
