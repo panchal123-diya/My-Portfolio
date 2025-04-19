@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# Hiten Patel - Portfolio Website
+# Diya Panchal - Portfolio Website
 
 A modern, responsive portfolio website for Hiten Patel, a software developer. This website showcases skills, projects, and provides contact information.
 
@@ -64,11 +64,11 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Contact
 
-Hiten Patel - [hp040912@gmail.com](mailto:hp040912@gmail.com)
+Diya Panchal - [diyapanchal296@gmail.com](mailto:diyapanchal296@gmail.com)
 
 ---
 
-Created with ❤️ by Hiten Patel 
+Created with ❤️ by Diya Panchal 
 =======
 # My-Portfolio
 A responsive and modern personal portfolio built with HTML, CSS, and JavaScript to showcase my skills and projects.
